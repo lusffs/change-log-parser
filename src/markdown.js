@@ -13,6 +13,12 @@ var markdown = {
     list += "\n";
     return list;
   },
+  plainText: (text) => {
+    return `${text}\n\n`;
+  },
+  inlineWorkItemLink: (id) => {
+    return `#${id}`;
+  },
 };
 
 module.exports = markdown;

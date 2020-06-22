@@ -34,11 +34,12 @@ if (fileName) {
           );
         });
       }
-
+      console.log(jsonArray);
       const featuresForUat = jsonArray.filter((item) => {
         return (
-          item["Work Item Type"] === "Feature" &&
-          item["UAT Required"] === "True"
+          item["Work Item Type"] === "Feature" && item["Acceptance Criteria"]
+          // &&
+          // item["Acceptance Criteria"].length > 0
         );
       });
 
@@ -46,20 +47,23 @@ if (fileName) {
         documentBody += markdown.title("UAT", 2);
         featuresForUat.forEach((row) => {
           // Properties: ID, Work Item Type, Title, Assigned To, State, Tags
-          documentBody += markdown.title(
-            markdown.inlineLink(workItemUrl(row["ID"]), row["Title"]),
-            3
+          documentBody += markdown.title(row["Title"], 3);
+          documentBody += markdown.plainText(
+            markdown.inlineWorkItemLink(row["ID"])
           );
+          documentBody += markdown.plainText(row["Acceptance Criteria"]);
         });
       }
 
       const features = jsonArray.filter((item) => {
-        return item["Work Item Type"] === "Feature";
+        return (
+          item["Work Item Type"] === "Feature" && !item["Acceptance Criteria"]
+        );
       });
 
       documentBody += markdown.title("No UAT", 2);
       var bullets = features.map((item) => {
-        return markdown.inlineLink(workItemUrl(item["ID"]), item["Title"]);
+        return markdown.inlineWorkItemLink(item["ID"]); // markdown.inlineLink(workItemUrl(item["ID"]), item["Title"]);
       });
       documentBody += markdown.bulletList(bullets);
 
